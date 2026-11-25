@@ -8,6 +8,58 @@ API REST em Spring Boot com as três questões do desafio:
 | 2 | **Estoque**: movimentações de entrada/saída com ID único, retornando o estoque final | `POST /api/estoque/movimentacoes` |
 | 3 | **Juros** de 2,5% ao dia sobre um valor vencido, calculados na data de hoje | `GET /api/juros` |
 
+## Resultados
+
+Saídas reais da API com os arquivos do enunciado (`vendas.json` e `estoque.json`).
+
+### 1. Comissão: `GET /api/comissoes`
+
+| Vendedor | Vendas | Total vendido | Comissão |
+|----------|-------:|--------------:|---------:|
+| João Silva | 10 | R$ 10.754,70 | **R$ 495,68** |
+| Maria Souza | 9 | R$ 9.874,30 | **R$ 465,95** |
+| Ana Lima | 9 | R$ 8.763,95 | **R$ 404,98** |
+| Carlos Oliveira | 8 | R$ 7.928,35 | **R$ 379,37** |
+| **Total** | **36** | **R$ 37.321,30** | **R$ 1.745,98** |
+
+O teste `ComissaoArquivoOficialTest` falha se algum desses valores mudar.
+
+### 2. Estoque: `POST /api/estoque/movimentacoes`
+
+Saída de 10 unidades da Caneta Azul (código 101, estoque inicial 150):
+
+```json
+{
+  "id": 1,
+  "codigoProduto": 101,
+  "descricaoProduto": "Caneta Azul",
+  "tipo": "SAIDA",
+  "quantidade": 10,
+  "descricao": "Venda no balcao",
+  "estoqueAnterior": 150,
+  "estoqueFinal": 140,
+  "dataHora": "2026-11-25T16:52:04.917272"
+}
+```
+
+### 3. Juros: `GET /api/juros?valor=1000.00&dataVencimento=...`
+
+R$ 1.000,00 vencido há 10 dias:
+
+```json
+{
+  "valorOriginal": 1000.00,
+  "dataVencimento": "2026-11-15",
+  "dataCalculo": "2026-11-25",
+  "diasAtraso": 10,
+  "taxaDiariaPercentual": 2.5,
+  "juros": 250.00,
+  "valorTotal": 1250.00
+}
+```
+
+`dataCalculo` é sempre o dia de hoje, por isso a resposta muda conforme a data em que a API roda.
+
 ## Tecnologias
 
 - Java 21 · Spring Boot 4.1 (Web MVC, Bean Validation) · Jackson 3
